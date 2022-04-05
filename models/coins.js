@@ -27,6 +27,4 @@ let Coins = sequelize.define('coins', {
     timestamps: true
 });
 
-Coins.sync({ force: true })
-
 module.exports.Coins = Coins;

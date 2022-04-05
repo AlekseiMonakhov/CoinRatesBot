@@ -21,7 +21,8 @@ function getCoinsRub() {
         headers: { 'X-CMC_PRO_API_KEY': `${apiKey}`}
     });
 }
-function getData() {
+async function getData() {
+    await Coins.sync({ force: true });
     Promise.all([getCoinsUsd(), getCoinsBtc(), getCoinsRub()])
         .then(function (results) {
             const coinsUsd = results[0];
@@ -32,7 +33,6 @@ function getData() {
                 const symbol = item.symbol
                 const price_usd = item.quote.USD.price.toFixed(2)
                 const percent_change_1h = item.quote.USD.percent_change_1h.toFixed(2)
-                console.log(id, symbol, price_usd, percent_change_1h)
                 const createRecord = await Coins.create({
                     id: id,
                     symbol: symbol,
@@ -65,11 +65,26 @@ function getData() {
 
         })
 }
-getData()
 
-function sendData () {
+const dataForBot = []
 
+
+async function sendData () {
+    const data = await Coins.findAll();
+    for (const item of data) {
+        const symbol = item.symbol
+        const price_btc = item.price_btc
+        const price_usd = item.price_usd
+        const price_rub = item.price_rub
+        const percent_change_1h = item.percent_change_1h
+        dataForBot.push(`\n${symbol} | ${price_btc} ₿ | ${price_usd} $ | ${price_rub} ₽ | ${percent_change_1h}% 1h`)
+    }
 }
+
+sendData()
+
+module.exports.dataForBot = dataForBot;
+
 
 
 
