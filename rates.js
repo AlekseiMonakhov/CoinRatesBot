@@ -1,8 +1,7 @@
 const axios = require('axios');
 const sequelize = require('./database/connection').sequelize
-const coinsModel = require("./models/coins").coinsModel;
+const Coins = require('./models/coins').Coins
 require('dotenv').config()
-
 const apiKey = process.env.API_KEY
 
 function getCoinsUsd() {
@@ -28,30 +27,46 @@ function getData() {
             const coinsUsd = results[0];
             const coinsBtc = results[1];
             const coinsRub = results[2];
-            // console.log(coinsUsd.data, coinsBtc.data, coinsRub.data);
             coinsUsd.data.data.forEach(async function (item) {
                 const id = item.id
                 const symbol = item.symbol
-                const price = item.quote.USD.price.toFixed(2)
+                const price_usd = item.quote.USD.price.toFixed(2)
                 const percent_change_1h = item.quote.USD.percent_change_1h.toFixed(2)
-                const ff = await sequelize.coinsModel.create(id, symbol, price, percent_change_1h)
-                console.log(ff)
+                console.log(id, symbol, price_usd, percent_change_1h)
+                const createRecord = await Coins.create({
+                    id: id,
+                    symbol: symbol,
+                    price_usd: price_usd,
+                    percent_change_1h: percent_change_1h
+                })
+            }),
+                coinsBtc.data.data.forEach(async function (item) {
+                    const id = item.id
+                    const price_btc = item.quote.BTC.price.toFixed(5)
+                    const addBtcPrice = await Coins.update(
+                        {
+                            price_btc: price_btc,
+                        },
+                        {
+                            where: { id: id },
+                        })
+                }),
+                coinsRub.data.data.forEach(async function (item) {
+                    const id = item.id
+                    const price_rub = item.quote.RUB.price.toFixed(2)
+                    const addBtcPrice = await Coins.update(
+                        {
+                            price_rub: price_rub,
+                        },
+                        {
+                            where: {id: id},
+                        })
+                })
 
-            })
         })
 }
-
 getData()
 
-function extractData(arr) {
-    arr.forEach(function (item) {
-        const id = item.id
-        const symbol = item.symbol
-        const price = item.quote.price
-        const percent_change_1h = item.quote.percent_change_1h
-        console.log(id, symbol, price, percent_change_1h)
-    })
-}
 
 
 

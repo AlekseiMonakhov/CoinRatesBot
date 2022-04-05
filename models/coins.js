@@ -1,7 +1,7 @@
 const { Sequelize }  = require("sequelize");
 const sequelize = require('../database/connection').sequelize
 
-let coinsModel = sequelize.define('coins', {
+let Coins = sequelize.define('coins', {
     id: {
         allowNull: false,
         primaryKey: true,
@@ -12,19 +12,21 @@ let coinsModel = sequelize.define('coins', {
         allowNull: false
     },
     price_usd: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     price_btc: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     price_rub: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     percent_change_1h: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     }
 }, {
     timestamps: true
 });
 
-module.exports.coinsModel = coinsModel;
+
+Coins.sync();
+module.exports.Coins = Coins;

@@ -1,16 +1,29 @@
-const Sequelize = require("sequelize");
-require('dotenv').config({path: '../.env'})
+'use strict';
 
-const config = {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT
-}
+const path = require('path');
+const Sequelize = require('sequelize');
+const db = {};
 
-let sequelize = new Sequelize(config);
+const DB = 'botDb';
+const USER = 'postgres';
+const PASSWORD = 'password';
+const HOST = '127.0.0.1';
+const DIALECT = 'postgres';
+const PORT = 5432;
+
+const sequelize = new Sequelize(
+    DB,
+    USER,
+    PASSWORD,
+    {
+        host: HOST,
+        dialect: DIALECT,
+        port: PORT,
+    }
+)
+
+
+
 
 async function Autenticate() {
     try {
