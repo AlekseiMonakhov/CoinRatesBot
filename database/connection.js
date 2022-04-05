@@ -1,15 +1,12 @@
-'use strict';
-
-const path = require('path');
 const Sequelize = require('sequelize');
-const db = {};
+require('dotenv').config({path: '../.env'})
 
-const DB = 'botDb';
-const USER = 'postgres';
-const PASSWORD = 'password';
-const HOST = '127.0.0.1';
-const DIALECT = 'postgres';
-const PORT = 5432;
+const DB = process.env.DB_NAME;
+const USER = process.env.DB_USER;
+const PASSWORD = process.env.DB_PASS;
+const HOST = process.env.DB_HOST;
+const DIALECT = process.env.DB_DIALECT;
+const PORT = process.env.DB_PORT;
 
 const sequelize = new Sequelize(
     DB,

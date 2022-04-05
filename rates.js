@@ -1,7 +1,8 @@
 const axios = require('axios');
-const sequelize = require('./database/connection').sequelize
+require('dotenv').config({path: './.env'})
 const Coins = require('./models/coins').Coins
-require('dotenv').config()
+
+
 const apiKey = process.env.API_KEY
 
 function getCoinsUsd() {
