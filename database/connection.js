@@ -20,8 +20,6 @@ const sequelize = new Sequelize(
 )
 
 
-
-
 async function Autenticate() {
     try {
         await sequelize.authenticate();

@@ -2,7 +2,6 @@ const axios = require('axios');
 require('dotenv').config({path: './.env'})
 const Coins = require('./models/coins').Coins
 
-
 const apiKey = process.env.API_KEY
 
 function getCoinsUsd() {
@@ -68,7 +67,9 @@ function getData() {
 }
 getData()
 
+function sendData () {
 
+}
 
 
 
