@@ -1,13 +1,31 @@
-const { Telegraf } = require('telegraf')
-const { dataForBot } = require("./rates");
 require('dotenv').config()
-
-const bot = new Telegraf(process.env.BOT_TOKEN)
-
-bot.start((ctx) => ctx.reply(`${dataForBot}`))
-
-bot.launch()
+const db = require("./db")
+require("./bot")
+const setCurrenciesRates = require('./setCurrenciesRates')
+const setCryptoRates = require('./setCryptoRates')
 
 
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+async function assertDatabaseConnectionOk() {
+	console.log(`Checking database connection...`)
+	try {
+		await db.sync()
+		await db.authenticate()
+		console.log('Database connection OK!')
+	} catch (error) {
+		console.log('Unable to connect to the database:')
+		console.log(error.message)
+		process.exit(1);
+	}
+}
+
+async function init() {
+	await assertDatabaseConnectionOk()
+
+	setCurrenciesRates()
+	setCryptoRates()
+	//Start Timers
+	setInterval(setCurrenciesRates, 86400000)
+	setInterval(setCryptoRates, 3600000)
+}
+
+init()
