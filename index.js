@@ -23,7 +23,6 @@ async function init() {
 
 	setCurrenciesRates()
 	setCryptoRates()
-	//Start Timers
 	setInterval(setCurrenciesRates, 86400000)
 	setInterval(setCryptoRates, 3600000)
 }

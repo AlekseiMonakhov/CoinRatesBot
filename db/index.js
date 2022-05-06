@@ -1,5 +1,4 @@
 const { Sequelize } = require('sequelize')
-
 const DB = process.env.DB_NAME;
 const USER = process.env.DB_USER;
 const PASSWORD = process.env.DB_PASS;

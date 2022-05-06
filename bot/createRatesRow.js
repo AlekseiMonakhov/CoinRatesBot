@@ -3,7 +3,6 @@ function createRatesRow(cryptoRatesRowData) {
 
 		let { symbol, slug, BTC, USD, RUB, hour_percent_change } = cryptoRatesRowData
 
-		// format numbers for log
 		USD = (Math.round(USD * 100) / 100).toFixed(2)
 		USD = USD.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 

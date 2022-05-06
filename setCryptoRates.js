@@ -62,7 +62,7 @@ async function getCryptoRates(numberOfActiveCoins) {
 	}
 }
 
-// TODO: for more accurate results maybe change to some API call
+
 function getCryptocoinToCurrenciesPrices(coinUsd, usdRur, currencyRur) {
 	const coinRur = coinUsd * usdRur
 	return coinRur / currencyRur
@@ -80,9 +80,9 @@ async function addRealCurrenciesToCryptoRates(cryptoRates) {
 
 	const usdRurRate = currenciesRates.filter(c => c.dataValues.valute === 'USD')[0].dataValues.value
 
-	// Add real currencies rates (33) to each coin 
+
 	return cryptoRates.map((cryptoCurr,i) => {
-		const usdCoinPrice = cryptoCurr.quote.USD.price // coin price in USD 
+		const usdCoinPrice = cryptoCurr.quote.USD.price
 
 		const cryptocurrencyToRealCurrenciesArr = {}
 		for (currency of currenciesRates) {
@@ -102,7 +102,7 @@ async function addRealCurrenciesToCryptoRates(cryptoRates) {
 async function handleCryptoratesDataAndInsertToDb(cryptoRates) {
 	try {
 
-		// Find real valute rates in db
+
 		let realCurrenciesRates = await models.Currencies.findAll({
 	  		attributes: ['valute', 'value']
 		})
@@ -110,18 +110,18 @@ async function handleCryptoratesDataAndInsertToDb(cryptoRates) {
 		if (!realCurrenciesRates) {
 			throw new Error('Can not get currencies')
 		}
-		// Calculate and append real valute rates for each coin
+
 		realCurrenciesRates = realCurrenciesRates.map(c => c.dataValues)
 		cryptoRates = await addRealCurrenciesToCryptoRates(cryptoRates)
 		
-		// Find BTC and ETH prices in USD
-		const btcId = 1   // Hardcoded coinmarket cap id
-		const ethId = 1027 // Hardcoded coinmarket cap id
+
+		const btcId = 1   // Coinmarketcap id
+		const ethId = 1027 // Coinmarketcap id
 		const btcUsdPrice = cryptoRates.filter(e => e.id === btcId)[0].quote.USD.price
 		const ethUsdPrice = cryptoRates.filter(e => e.id === ethId)[0].quote.USD.price
 		const usdRub = realCurrenciesRates.filter(e => e.valute === 'USD')[0].value
 		
-		// Prepare array for table insert
+
 		const tableArr = cryptoRates.map((c) => {
 			return {
 				id: c.cmc_rank,

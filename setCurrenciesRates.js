@@ -1,7 +1,6 @@
 const axios = require('axios')
 const { models } = require('./db')
 
-// SET RUB TO CURRENCIES RATES TO THE DATABASE TABLE
 async function setCurrenciesRates() {
 
 	try {
@@ -23,13 +22,12 @@ async function setCurrenciesRates() {
 				}
 			})
 
-			valuteArr = valuteArr.filter(c => c.valute !== 'HKD' && c.valute !== 'TMT') // we use rbc site valutes only 
+			valuteArr = valuteArr.filter(c => c.valute !== 'HKD' && c.valute !== 'TMT')
 
 			await models.Currencies.bulkCreate(valuteArr, { 
 				updateOnDuplicate: ["id", "valute", "value"] 
 			})
-			
-			// const rubleRate = res.data.Valute.USD.Value
+
 
 		} else {
 			throw new Error('Can not set ruble rate')
